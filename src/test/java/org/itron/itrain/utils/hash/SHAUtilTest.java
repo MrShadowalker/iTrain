@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 
 /**
  * SHAUtil 的单元测试类
+ *
  * @author Shadowalker
  */
 public class SHAUtilTest {

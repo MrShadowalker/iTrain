@@ -9,12 +9,14 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * 实现 SHA-256 加密
+ *
  * @author Shadowalker
  */
 public class SHAUtil {
 
     /**
      * 利用 Apache commons-codec 工具类实现 SHA-256 加密
+     *
      * @param originalStr 加密前的报文
      * @return 加密后的报文
      */
@@ -33,6 +35,7 @@ public class SHAUtil {
 
     /**
      * 利用 Hutool 工具类实现 SHA-256 加密
+     *
      * @param originalStr
      * @return
      */
