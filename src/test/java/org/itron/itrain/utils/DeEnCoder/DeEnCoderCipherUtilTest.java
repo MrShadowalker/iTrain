@@ -1,4 +1,4 @@
-package org.itron.itrain.utils;
+package org.itron.itrain.utils.DeEnCoder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.testng.Assert;

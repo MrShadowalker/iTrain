@@ -45,6 +45,12 @@
             <artifactId>hutool-all</artifactId>
             <version>3.0.9</version>
         </dependency>
+        <!--加解密相关-->
+        <dependency>
+            <groupId>com.google.crypto.tink</groupId>
+            <artifactId>tink</artifactId>
+            <version>1.2.0</version>
+        </dependency>
         <!--测试相关-->
         <dependency>
             <groupId>org.mockito</groupId>

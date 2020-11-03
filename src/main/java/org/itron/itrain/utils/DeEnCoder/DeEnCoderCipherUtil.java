@@ -1,4 +1,4 @@
-package org.itron.itrain.utils;
+package org.itron.itrain.utils.DeEnCoder;
 
 import org.testng.util.Strings;
 import sun.misc.BASE64Decoder;
