@@ -12,6 +12,7 @@ import java.security.SecureRandom;
 
 /**
  * 基于 Cipher 实现的加密和解密工具类
+ *
  * @author Shadowalker
  */
 public class DeEnCoderCipherUtil {
@@ -23,8 +24,9 @@ public class DeEnCoderCipherUtil {
 
     /**
      * function 加密通用方法
+     *
      * @param originalContent 明文
-     * @param key 加密密钥
+     * @param key             加密密钥
      * @return 密文
      */
     public static String encrypt(String originalContent, String key) {
@@ -44,8 +46,9 @@ public class DeEnCoderCipherUtil {
 
     /**
      * function 解密通用方法
+     *
      * @param ciphertext 密文
-     * @param key DES 解密密钥（同加密密钥）
+     * @param key        DES 解密密钥（同加密密钥）
      * @return 明文
      */
     public static String decrypt(String ciphertext, String key) {
@@ -67,8 +70,9 @@ public class DeEnCoderCipherUtil {
 
     /**
      * function 字节加密方法
+     *
      * @param originalContent 明文
-     * @param key 加密密钥的 byte 数组
+     * @param key             加密密钥的 byte 数组
      * @return 密文的 byte 数组
      * @throws Exception
      */
