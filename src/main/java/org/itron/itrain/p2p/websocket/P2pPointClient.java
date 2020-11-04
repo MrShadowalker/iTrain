@@ -1,4 +1,4 @@
-package org.itron.itrain.p2p;
+package org.itron.itrain.p2p.websocket;
 
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.WebSocket;
