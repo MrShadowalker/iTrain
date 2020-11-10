@@ -1,4 +1,4 @@
-package org.itron.itrain.p2ppbft;
+package org.itron.itrain.p2ppbft.websocket;
 
 /**
  * PBFT 基于 WebSocket 的实现

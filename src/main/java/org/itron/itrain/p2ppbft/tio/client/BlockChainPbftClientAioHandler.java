@@ -1,14 +1,22 @@
-package org.itron.itrain.p2p.tio.client;
+package org.itron.itrain.p2ppbft.tio.client;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.itron.itrain.p2p.tio.common.BlockPacket;
+import org.itron.itrain.p2ppbft.tio.common.BlockPacket;
+import org.itron.itrain.p2ppbft.tio.common.VoteEnum;
+import org.itron.itrain.p2ppbft.tio.common.VoteInfo;
+import org.itron.itrain.utils.merkle.SimpleMerkleTree;
 import org.tio.client.intf.ClientAioHandler;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
+import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 基于 t-io 的区块链底层 P2P 网络平台的客户端 Handler
@@ -16,7 +24,7 @@ import java.nio.ByteBuffer;
  * @author Shadowalker
  */
 @Slf4j
-public class BlockChainClientAioHandler implements ClientAioHandler {
+public class BlockChainPbftClientAioHandler implements ClientAioHandler {
 
     private static BlockPacket heartbeatPacket = new BlockPacket();
 
@@ -114,6 +122,9 @@ public class BlockChainClientAioHandler implements ClientAioHandler {
     /**
      * 处理消息
      *
+     * 1. 当服务端收到了来自客户端的非 JSON 化数据，且数据为“服务端开始区块入库”，则说明 PBFT 阶段一致性已经达成，此时不处理该消息。否则，进行下一步处理。
+     * 2. 当服务端收到来自客户端的非 JSON 化数据，且数据不为“服务端开始区块入库”，则说明当前不是 PBFT 阶段，这里j仅将收到的消息回传给服务端。
+     * 3. 当服务端收到的是 JSON 化数据，则说明目前是 PBFT 阶段。服务端先校验消息的有效性，校验通过后再根据消息的状态码进行相应的 PBFT 逻辑处理。
      * @param packet
      * @param channelContext
      * @throws Exception
@@ -125,7 +136,62 @@ public class BlockChainClientAioHandler implements ClientAioHandler {
         if (body != null) {
             String str = new String(body, BlockPacket.CHARSET);
             log.info("Shadow.Net 客户端收到消息：{}", str);
+
+            // 收到入库的消息则不再发送
+            if ("服务端开始区块入库".equals(str)) {
+                return;
+            }
+
+            // 发送 PBFT 投票信息
+            // 如果收到的不是 JSON 化数据，说明仍在双方建立连接的过程中。
+            // 目前连接已经建立完毕，发起投票。
+            if (! str.startsWith("{")) {
+                VoteInfo vi = createVoteInfo(VoteEnum.PREPREPARE);
+                BlockPacket bp = new BlockPacket();
+                bp.setBody(JSON.toJSONString(vi).getBytes(BlockPacket.CHARSET));
+                Tio.send(channelContext, bp);
+                log.info("客户端发送到服务端的 PBFT 消息：" + JSON.toJSONString(vi));
+                return;
+            }
+
+            // 如果是 JSON 化数据，则表明进入了 PBFT 投票阶段
+            JSONObject json = JSON.parseObject(str);
+            if (! json.containsKey("code")) {
+                log.info("客户端收到非 JSON 化数据！");
+            }
+            int code = json.getIntValue("code");
+            if (code == VoteEnum.PREPARE.getCode()) {
+                // 校验 Hash
+                VoteInfo voteInfo = JSON.parseObject(str, VoteInfo.class);
+                if (! voteInfo.getHash().equals(SimpleMerkleTree.getTreeNodeHash(voteInfo.getContents()))) {
+                    log.info("客户端收到错误的 JSON 化数据！");
+                    return;
+                }
+
+                // 校验成功，发送下一个状态的数据
+                VoteInfo vi = createVoteInfo(VoteEnum.COMMIT);
+                BlockPacket bp = new BlockPacket();
+                bp.setBody(JSON.toJSONString(vi).getBytes(BlockPacket.CHARSET));
+                Tio.send(channelContext, bp);
+                log.info("客户端发送到服务端的 PBFT 消息：" + JSON.toJSONString(vi));
+            }
         }
     }
+
+    // 根据 VoteEnum 构建对应状态的 VoteInfo
+    private VoteInfo createVoteInfo(VoteEnum ve) {
+        VoteInfo vi = new VoteInfo();
+        vi.setCode(ve.getCode());
+        List<String> list = new ArrayList<>();
+        list.add("AI");
+        list.add("BlockChain");
+        vi.setContents(list);
+        vi.setHash(SimpleMerkleTree.getTreeNodeHash(list));
+        return vi;
+    }
+
+    /********** 后续操作 **********/
+    // 在名为 itrain 的工程根目录运行 maven 命令 mvn clean package，将 itrain 工程打包成 itrain.jar
+    // 随后切换到 target 目录下，执行命令 java -jar itrain.jar
 
 }
