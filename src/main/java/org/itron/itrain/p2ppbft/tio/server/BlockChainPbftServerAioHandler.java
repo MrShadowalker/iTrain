@@ -113,7 +113,7 @@ public class BlockChainPbftServerAioHandler implements ServerAioHandler {
 
     /**
      * 处理消息
-     *
+     * <p>
      * 1. 当服务端收到来自客户端的非 JSON 化数据时，则说明当前不是 PBFT 阶段，这里仅将收到的消息回传给客户端。
      * 2. 当服务端收到的是 JSON 化数据时，则说明目前是 PBFT 阶段。服务端先校验消息的有效性，校验通过后再根据消息的状态码进行相应的 PBFT 逻辑处理。
      * 2.1 若服务端收到的是 Pre-prepare 消息，则将消息的状态置为 Prepare，并将消息发送给客户端。
