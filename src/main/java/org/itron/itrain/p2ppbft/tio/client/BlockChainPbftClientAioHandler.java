@@ -121,7 +121,7 @@ public class BlockChainPbftClientAioHandler implements ClientAioHandler {
 
     /**
      * 处理消息
-     *
+     * <p>
      * 1. 当服务端收到了来自客户端的非 JSON 化数据，且数据为“服务端开始区块入库”，则说明 PBFT 阶段一致性已经达成，此时不处理该消息。否则，进行下一步处理。
      * 2. 当服务端收到来自客户端的非 JSON 化数据，且数据不为“服务端开始区块入库”，则说明当前不是 PBFT 阶段，这里j仅将收到的消息回传给服务端。
      * 3. 当服务端收到的是 JSON 化数据，则说明目前是 PBFT 阶段。服务端先校验消息的有效性，校验通过后再根据消息的状态码进行相应的 PBFT 逻辑处理。
