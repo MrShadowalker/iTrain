@@ -24,6 +24,7 @@ public class FileStoreUtil {
 
     /**
      * 将文件内容写入目标文件：Guava 方式
+     *
      * @param targetFileName
      * @param content
      */
@@ -38,6 +39,7 @@ public class FileStoreUtil {
 
     /**
      * 将文件内容向后追加写入目标文件：FileWriter 方式
+     *
      * @param targetFileName
      * @param content
      */
@@ -54,6 +56,7 @@ public class FileStoreUtil {
 
     /**
      * 将文件内容向后追加写入目标文件：Guava 方式
+     *
      * @param targetFileName
      * @param content
      */
@@ -68,10 +71,11 @@ public class FileStoreUtil {
 
     /**
      * 模拟区块链内容写入文件
+     *
      * @param content
      */
     public static void writeIntoFile(String content) {
-        try  {
+        try {
             // 查看当前目录下是否有正在写入的 logging 文件，有则继续使用，无则创建
             File root = new File(".//");
             // 获取当前文件夹下的所有文件
@@ -103,7 +107,7 @@ public class FileStoreUtil {
                 }
             }
             // 无则创建新的文件
-            if (! has) {
+            if (!has) {
                 String targetFileName = ".//blockchain-" + System.currentTimeMillis() + ".logging";
                 appendToTargetFileByGuava(targetFileName, content);
                 return;
@@ -128,11 +132,12 @@ public class FileStoreUtil {
 
     /**
      * 根据 length 长度生成数字符串
+     *
      * @param length
      * @return
      */
     private static String generateVCode(int length) {
-        Long vCode = new Double((Math.random() + 1) *  Math.pow(10, length - 1)).longValue();
+        Long vCode = new Double((Math.random() + 1) * Math.pow(10, length - 1)).longValue();
         return vCode.toString();
     }
 
