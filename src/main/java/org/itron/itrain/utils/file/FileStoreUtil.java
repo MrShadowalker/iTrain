@@ -77,12 +77,19 @@ public class FileStoreUtil {
     public static void writeIntoFile(String content) {
         try {
             // 查看当前目录下是否有正在写入的 logging 文件，有则继续使用，无则创建
-            File root = new File(".//");
+            File root = new File(".//blockchainLog//");
+            //如果文件夹不存在则创建
+            if (!root.exists() && !root.isDirectory()) {
+                log.info("/blockchainLog 不存在，创建 /blockchainLog ……");
+                root.mkdir();
+            } else {
+                log.info("/blockchainLog 目录存在，无需创建。");
+            }
             // 获取当前文件夹下的所有文件
             File[] files = root.listFiles();
             if (files == null) {
                 // 如果根目录下没有任何文件则创建新的文件
-                String targetFileName = ".//blockchain-" + System.currentTimeMillis() + ".logging";
+                String targetFileName = ".//blockchainLog//blockchain-" + System.currentTimeMillis() + ".logging";
                 appendToTargetFileByGuava(targetFileName, content);
                 return;
             }
@@ -108,7 +115,7 @@ public class FileStoreUtil {
             }
             // 无则创建新的文件
             if (!has) {
-                String targetFileName = ".//blockchain-" + System.currentTimeMillis() + ".logging";
+                String targetFileName = ".//blockchainLog//blockchain-" + System.currentTimeMillis() + ".logging";
                 appendToTargetFileByGuava(targetFileName, content);
                 return;
             }
