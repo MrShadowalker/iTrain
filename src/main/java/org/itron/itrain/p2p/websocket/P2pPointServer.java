@@ -40,7 +40,7 @@ public class P2pPointServer {
      * 初始化 P2P Server 端
      */
     @PostConstruct
-    @Order(1)
+    @Order(7)
     public void initServer() {
         /**
          * 初始化 WebSocket 的服务器定义内部类对象 socketServer，源于 WebSocketServer

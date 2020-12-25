@@ -1,4 +1,4 @@
-package org.itron.itrain.core.sqlite.config;
+package org.itron.itrain.utils.database.sqlite.config;
 
 import org.hibernate.JDBCException;
 import org.hibernate.ScrollMode;
@@ -20,30 +20,17 @@ import org.hibernate.exception.spi.ViolatedConstraintNameExtracter;
 import org.hibernate.internal.util.JdbcExceptionHelper;
 import org.hibernate.mapping.Column;
 import org.hibernate.type.StandardBasicTypes;
-import org.itron.itrain.core.sqlite.config.identity.SQLiteDialectIdentityColumnSupport;
+import org.itron.itrain.utils.database.sqlite.config.identity.SQLiteDialectIdentityColumnSupport;
 
 import java.sql.SQLException;
 import java.sql.Types;
 
 /**
- * SQLite 的方言，目的是使用 Hibernate jpa 操作 SQLite
+ * SQLite 的方言，目的是使用 Hibernate JPA 操作 SQLite
  *
  * @author Shadowalker
  */
 public class SQLiteDialect extends Dialect {
-
-    private static final int SQLITE_BUSY = 5;
-    private static final int SQLITE_LOCKED = 6;
-    private static final int SQLITE_IOERR = 10;
-    private static final int SQLITE_CORRUPT = 11;
-    private static final int SQLITE_NOTFOUND = 12;
-    private static final int SQLITE_FULL = 13;
-    private static final int SQLITE_CANTOPEN = 14;
-    private static final int SQLITE_PROTOCOL = 15;
-    private static final int SQLITE_TOOBIG = 18;
-    private static final int SQLITE_CONSTRAINT = 19;
-    private static final int SQLITE_MISMATCH = 20;
-    private static final int SQLITE_NOTADB = 26;
 
     private final UniqueDelegate uniqueDelegate;
 
@@ -104,6 +91,8 @@ public class SQLiteDialect extends Dialect {
         uniqueDelegate = new SQLiteUniqueDelegate(this);
     }
 
+    /********** IDENTITY support **********/
+
     private static final SQLiteDialectIdentityColumnSupport IDENTITY_COLUMN_SUPPORT =
             new SQLiteDialectIdentityColumnSupport(new SQLiteDialect());
 
@@ -111,6 +100,8 @@ public class SQLiteDialect extends Dialect {
     public IdentityColumnSupport getIdentityColumnSupport() {
         return IDENTITY_COLUMN_SUPPORT;
     }
+
+    /********** limit/offset support **********/
 
     private static final AbstractLimitHandler LIMIT_HANDLER = new AbstractLimitHandler() {
 
@@ -136,6 +127,8 @@ public class SQLiteDialect extends Dialect {
         return LIMIT_HANDLER;
     }
 
+    /********** lock acquisition support **********/
+
     @Override
     public boolean supportsLockTimeouts() {
         // may be http://sqlite.org/c3ref/db_mutex.html ?
@@ -152,6 +145,8 @@ public class SQLiteDialect extends Dialect {
         return false;
     }
 
+    /********** curent timestamp support **********/
+
     @Override
     public boolean supportsCurrentTimestampSelection() {
         return true;
@@ -166,6 +161,20 @@ public class SQLiteDialect extends Dialect {
     public String getCurrentTimestampSelectString() {
         return "select current_timestamp";
     }
+
+    /********** SQLException support **********/
+    private static final int SQLITE_BUSY = 5;
+    private static final int SQLITE_LOCKED = 6;
+    private static final int SQLITE_IOERR = 10;
+    private static final int SQLITE_CORRUPT = 11;
+    private static final int SQLITE_NOTFOUND = 12;
+    private static final int SQLITE_FULL = 13;
+    private static final int SQLITE_CANTOPEN = 14;
+    private static final int SQLITE_PROTOCOL = 15;
+    private static final int SQLITE_TOOBIG = 18;
+    private static final int SQLITE_CONSTRAINT = 19;
+    private static final int SQLITE_MISMATCH = 20;
+    private static final int SQLITE_NOTADB = 26;
 
     @Override
     public SQLExceptionConversionDelegate buildSQLExceptionConversionDelegate() {
@@ -203,10 +212,14 @@ public class SQLiteDialect extends Dialect {
         }
     };
 
+    /********** union subclass support **********/
+
     @Override
     public boolean supportsUnionAll() {
         return true;
     }
+
+    /********** DDL support **********/
 
     @Override
     public boolean canCreateSchema() {

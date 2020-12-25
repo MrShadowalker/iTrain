@@ -1,4 +1,4 @@
-package org.itron.itrain.core.sqlite.config.identity;
+package org.itron.itrain.utils.database.sqlite.config.identity;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;

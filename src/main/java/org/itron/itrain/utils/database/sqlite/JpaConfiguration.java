@@ -24,7 +24,7 @@ import java.util.Map;
  * @author Shadowalker
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "org.itron.itrain.base.dao", transactionManagerRef = "jpaTransactionManager", entityManagerFactoryRef = "localContainerEntityManagerFactoryBean")
+@EnableJpaRepositories(basePackages = "org.itron.itrain.core.repository", transactionManagerRef = "jpaTransactionManager", entityManagerFactoryRef = "localContainerEntityManagerFactoryBean")
 @EnableTransactionManagement
 public class JpaConfiguration {
 
@@ -34,7 +34,7 @@ public class JpaConfiguration {
     @Resource
     private JpaProperties jpaProperties;
 
-    @Autowired
+    @Resource
     private HibernateProperties hibernateProperties;
 
     @Autowired
@@ -59,9 +59,14 @@ public class JpaConfiguration {
     @Autowired
     @Bean
     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean(
+            @Qualifier(value = "EmbeddeddataSource") DataSource dataSource,
             EntityManagerFactoryBuilder builder) {
-        return builder.dataSource(sqliteDataSource).packages("org.itron.itrain.base.dao.entity")
-                .properties(getVendorProperties()).build();
+        return builder
+//                .dataSource(sqliteDataSource)
+                .dataSource(dataSource)
+                .packages("org.itron.itrain.core.model")
+                .properties(getVendorProperties())
+                .build();
     }
 
     // Springboot 1.5.x 版本可使用此方法

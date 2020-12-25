@@ -39,7 +39,7 @@ public class BlockChainServerStarter {
     public static int serverPort = TioConstant.PORT;
 
     @PostConstruct
-    @Order(1)
+    @Order(5)
     public void start() {
         try {
             log.info("Shadow.Net 服务端即将启动……");

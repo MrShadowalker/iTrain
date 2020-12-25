@@ -1,4 +1,4 @@
-package org.itron.itrain.core.sqlite.config;
+package org.itron.itrain.utils.database.sqlite.config;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.SessionFactoryImpl;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 构建一个存放表名和model实体class的对应关系，如member_entity:MemberEntity.class
+ * 构建一个存放表名和 model 实体 class 的对应关系，如 member_entity : MemberEntity.class
  *
  * @author Shadowalker
  */

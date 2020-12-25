@@ -38,7 +38,7 @@ public class P2pPointPbftServer {
      * 初始化 P2P Server 端
      */
     @PostConstruct
-    @Order(1)
+    @Order(3)
     public void initServer() {
         /**
          * 初始化 WebSocket 的服务端，定义内部类对象 socketServer，源于 WebSocket

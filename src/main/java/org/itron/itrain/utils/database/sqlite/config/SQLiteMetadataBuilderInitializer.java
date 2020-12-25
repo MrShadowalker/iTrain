@@ -1,4 +1,4 @@
-package org.itron.itrain.core.sqlite.config;
+package org.itron.itrain.utils.database.sqlite.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.MetadataBuilder;

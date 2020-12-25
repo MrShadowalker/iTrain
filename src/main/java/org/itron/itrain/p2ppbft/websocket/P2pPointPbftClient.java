@@ -38,7 +38,7 @@ public class P2pPointPbftClient {
      * 连接到服务端
      */
     @PostConstruct
-    @Order(2)
+    @Order(4)
     public void connectPeer() {
         try {
             // 创建 WebSocket 的客户端

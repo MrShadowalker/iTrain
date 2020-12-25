@@ -50,7 +50,7 @@ public class BlockChainClientStarter {
      * 同时，为了保证客户端后于服务端加载，用 @Order(2) 标识了 start()。
      */
     @PostConstruct
-    @Order(2)
+    @Order(6)
     public void start() {
         try {
             log.info("Shadow.Net 客户端即将启动……");
